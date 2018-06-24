@@ -7,6 +7,7 @@ target/
 .project
 .settings
 openblocks.iml
+_openblocks_. iml
 bin/
 .settings/
 *~

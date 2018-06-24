@@ -59,7 +59,7 @@
 				<BlockConnector connector-type="number" connector-kind="socket" label="bc.increment">
 					<DefaultArg genus-name="number" label="1" />
 				</BlockConnector>
-				<BlockConnector label="commands" connector-type="cmd" connector-kind="socket" />
+				<BlockConnector label="bc.commands" connector-type="cmd" connector-kind="socket" />
 			</BlockConnectors>
 		</BlockGenus>
 		
@@ -186,7 +186,7 @@
 			</arg-description>
           </description>
           <BlockConnectors>
-            <BlockConnector label="commands" connector-kind="socket" connector-type="cmd" />
+            <BlockConnector label="bc.commands" connector-kind="socket" connector-type="cmd" />
             <BlockConnector label="bc.condition" connector-kind="socket" connector-type="boolean">
               <DefaultArg genus-name="less" label="Pick a test" />
             </BlockConnector>    
@@ -11070,7 +11070,7 @@
                 
                 <!-- Shassis 2WD -->
                 
-		<BlockGenus name="shassis-2WD-HBridge-setup" kind="command" color="165 127 59" initlabel="bg.shassis-2WD-HBridge-setup">
+		<BlockGenus name="shassis-2WD-HBridge-setup" kind="command" color="25 90 220" initlabel="bg.shassis-2WD-HBridge-setup">
 			<BlockConnectors>
 				<BlockConnector connector-type="number" connector-kind="socket" label="bc.shassis-2WD-m1a-pin">
 					<DefaultArg genus-name="pinListDigital_D2" label="D2" />
@@ -11086,7 +11086,7 @@
 				</BlockConnector>
 			</BlockConnectors>
 		</BlockGenus>              
-                <BlockGenus name="shassis-2WD-setup" kind="command" color="165 127 59" initlabel="bg.shassis-2WD-setup">
+                <BlockGenus name="shassis-2WD-setup" kind="command" color="25 90 220" initlabel="bg.shassis-2WD-setup">
 			<BlockConnectors>
 				<BlockConnector connector-type="number" connector-kind="socket" label="bc.shassis-2WD-m1speed-pin">
 					<DefaultArg genus-name="pinListDigital_D10" label="D10" />
@@ -11102,43 +11102,43 @@
 				</BlockConnector>
 			</BlockConnectors>
 		</BlockGenus>              
-                <BlockGenus name="shassis-2WD-forward" kind="command" color="165 127 59" initlabel="bg.shassis-2WD-forward">
+                <BlockGenus name="shassis-2WD-forward" kind="command" color="25 90 220" initlabel="bg.shassis-2WD-forward">
 		</BlockGenus>
-                <BlockGenus name="shassis-2WD-forward-speed" kind="command" color="165 127 59" initlabel="bg.shassis-2WD-forward-speed">
+                <BlockGenus name="shassis-2WD-forward-speed" kind="command" color="25 90 220" initlabel="bg.shassis-2WD-forward-speed">
                     <BlockConnectors>
 				<BlockConnector connector-type="number" connector-kind="socket" label="bc.speed_number">
 					<DefaultArg genus-name="number" label="100" />
 				</BlockConnector>
                     </BlockConnectors>
 		</BlockGenus>
-                <BlockGenus name="shassis-2WD-back" kind="command" color="165 127 59" initlabel="bg.shassis-2WD-back">
+                <BlockGenus name="shassis-2WD-back" kind="command" color="25 90 220" initlabel="bg.shassis-2WD-back">
 		</BlockGenus>
-                <BlockGenus name="shassis-2WD-back-speed" kind="command" color="165 127 59" initlabel="bg.shassis-2WD-back-speed">
+                <BlockGenus name="shassis-2WD-back-speed" kind="command" color="25 90 220" initlabel="bg.shassis-2WD-back-speed">
                     <BlockConnectors>
 				<BlockConnector connector-type="number" connector-kind="socket" label="bc.speed_number">
 					<DefaultArg genus-name="number" label="100" />
 				</BlockConnector>
                     </BlockConnectors>
 		</BlockGenus>
-                <BlockGenus name="shassis-2WD-left" kind="command" color="165 127 59" initlabel="bg.shassis-2WD-left">
+                <BlockGenus name="shassis-2WD-left" kind="command" color="25 90 220" initlabel="bg.shassis-2WD-left">
 		</BlockGenus>
-                <BlockGenus name="shassis-2WD-left-speed" kind="command" color="165 127 59" initlabel="bg.shassis-2WD-left-speed">
+                <BlockGenus name="shassis-2WD-left-speed" kind="command" color="25 90 220" initlabel="bg.shassis-2WD-left-speed">
                     <BlockConnectors>
 				<BlockConnector connector-type="number" connector-kind="socket" label="bc.speed_number">
 					<DefaultArg genus-name="number" label="100" />
 				</BlockConnector>
                     </BlockConnectors>
 		</BlockGenus>
-                <BlockGenus name="shassis-2WD-right" kind="command" color="165 127 59" initlabel="bg.shassis-2WD-right">
+                <BlockGenus name="shassis-2WD-right" kind="command" color="25 90 220" initlabel="bg.shassis-2WD-right">
 		</BlockGenus>
-                <BlockGenus name="shassis-2WD-right-speed" kind="command" color="165 127 59" initlabel="bg.shassis-2WD-right-speed">
+                <BlockGenus name="shassis-2WD-right-speed" kind="command" color="25 90 220" initlabel="bg.shassis-2WD-right-speed">
                     <BlockConnectors>
 				<BlockConnector connector-type="number" connector-kind="socket" label="bc.speed_number">
 					<DefaultArg genus-name="number" label="100" />
 				</BlockConnector>
                     </BlockConnectors>
 		</BlockGenus>
-                <BlockGenus name="shassis-2WD-stop" kind="command" color="165 127 59" initlabel="bg.shassis-2WD-stop">
+                <BlockGenus name="shassis-2WD-stop" kind="command" color="25 90 220" initlabel="bg.shassis-2WD-stop">
 		</BlockGenus>
 	</BlockGenuses>
 

@@ -35,7 +35,9 @@ import com.ardublock.ui.listener.SaveButtonListener;
 
 import edu.mit.blocks.controller.WorkspaceController;
 import edu.mit.blocks.workspace.Workspace;
-
+import java.awt.Font;
+import javax.swing.ImageIcon;
+import javax.swing.UIManager;
 
 public class OpenblocksFrame extends JFrame
 {
@@ -47,9 +49,10 @@ public class OpenblocksFrame extends JFrame
 	private Context context;
 	private JFileChooser fileChooser;
 	private FileFilter ffilter;
-	
+      
 	private ResourceBundle uiMessageBundle;
-	
+	private double zoom = 1.2;
+        
 	public void addListener(OpenblocksFrameListener ofl)
 	{
 		context.registerOpenblocksFrameListener(ofl);
@@ -70,19 +73,17 @@ public class OpenblocksFrame extends JFrame
 	{
 		context = Context.getContext();
 		this.setTitle(makeFrameTitle());
-		this.setSize(new Dimension(1024, 760));
+		this.setSize(new Dimension(1024, 760));                
 		this.setLayout(new BorderLayout());
 		//put the frame to the center of screen
 		this.setLocationRelativeTo(null);
-		
 		uiMessageBundle = ResourceBundle.getBundle("com/ardublock/block/ardublock");
-		
 		fileChooser = new JFileChooser();
 		ffilter = new FileNameExtensionFilter(uiMessageBundle.getString("ardublock.file.suffix"), "abp");
 		fileChooser.setFileFilter(ffilter);
 		fileChooser.addChoosableFileFilter(ffilter);
 		
-		initOpenBlocks();
+		initOpenBlocks();                
 	}
 	
 	private void initOpenBlocks()
@@ -98,27 +99,35 @@ public class OpenblocksFrame extends JFrame
 		
 		// WTF I can't add worksapcelistener by workspace contrller
 		workspace.addWorkspaceListener(new ArdublockWorkspaceListener(this));
-		
+		Font defaultFont = new Font("Arial",Font.PLAIN, 14);
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new FlowLayout());
+                buttons.setFont(defaultFont);
 		JButton newButton = new JButton(uiMessageBundle.getString("ardublock.ui.new"));
 		newButton.addActionListener(new NewButtonListener(this));
+                newButton.setFont(defaultFont);
 		JButton saveButton = new JButton(uiMessageBundle.getString("ardublock.ui.save"));
+                saveButton.setFont(defaultFont);
 		saveButton.addActionListener(new SaveButtonListener(this));
 		JButton saveAsButton = new JButton(uiMessageBundle.getString("ardublock.ui.saveAs"));
+                saveAsButton.setFont(defaultFont);
 		saveAsButton.addActionListener(new SaveAsButtonListener(this));
 		JButton openButton = new JButton(uiMessageBundle.getString("ardublock.ui.load"));
 		openButton.addActionListener(new OpenButtonListener(this));
+                openButton.setFont(defaultFont);
 		JButton generateButton = new JButton(uiMessageBundle.getString("ardublock.ui.upload"));
 		generateButton.addActionListener(new GenerateCodeButtonListener(this, context));
+                generateButton.setFont(defaultFont);
 		JButton serialMonitorButton = new JButton(uiMessageBundle.getString("ardublock.ui.serialMonitor"));
+                serialMonitorButton.setFont(defaultFont);
 		serialMonitorButton.addActionListener(new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
 				context.getEditor().handleSerial();
 			}
 		});
 		JButton saveImageButton = new JButton(uiMessageBundle.getString("ardublock.ui.saveImage"));
-		saveImageButton.addActionListener(new ActionListener () {
+                saveImageButton.setFont(new Font("Arial", Font.PLAIN, 8));
+                saveImageButton.addActionListener(new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
 				Dimension size = workspace.getCanvasSize();
 				System.out.println("size: " + size);
@@ -143,16 +152,41 @@ public class OpenblocksFrame extends JFrame
 				}
 			}
 		});
-
+                ImageIcon zoom_in_Icon = new ImageIcon(getClass().getResource("/com/ardublock/zoom-in16x16.png"));
+                ImageIcon zoom_out_Icon = new ImageIcon(getClass().getResource("/com/ardublock/zoom-out16x16.png"));
+                int iconWidth = zoom_in_Icon.getIconWidth();
+                int iconHeight = zoom_in_Icon.getIconHeight();
+                JButton zoomInButton = new JButton();
+                zoomInButton.setIcon(zoom_in_Icon);
+                zoomInButton.setSize(iconWidth, iconHeight);                
+                zoomInButton.addActionListener(new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+                            zoom += 0.1;
+                            workspace.setWorkspaceZoom(zoom);
+			}
+		});
+                JButton zoomOutButton = new JButton();
+                zoomOutButton.setIcon(zoom_out_Icon);
+                zoomOutButton.setSize(iconWidth, iconHeight);
+                zoomOutButton.addActionListener(new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+                            zoom -= 0.1;
+                            workspace.setWorkspaceZoom(zoom);
+			}
+		});
+                
 		buttons.add(newButton);
 		buttons.add(saveButton);
 		buttons.add(saveAsButton);
 		buttons.add(openButton);
 		buttons.add(generateButton);
 		buttons.add(serialMonitorButton);
-
+                buttons.add(zoomInButton);
+                buttons.add(zoomOutButton);
+                
 		JPanel bottomPanel = new JPanel();
 		JButton websiteButton = new JButton(uiMessageBundle.getString("ardublock.ui.website"));
+                websiteButton.setFont(new Font("Arial", Font.PLAIN, 8));
 		websiteButton.addActionListener(new ActionListener () {
 			public void actionPerformed(ActionEvent e) {
 			    Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
@@ -168,7 +202,7 @@ public class OpenblocksFrame extends JFrame
 			}
 		});
 		JLabel versionLabel = new JLabel("v " + uiMessageBundle.getString("ardublock.ui.version"));
-		
+		versionLabel.setFont(new Font("Arial", Font.PLAIN, 8));
 		bottomPanel.add(saveImageButton);
 		bottomPanel.add(websiteButton);
 		bottomPanel.add(versionLabel);
@@ -177,6 +211,7 @@ public class OpenblocksFrame extends JFrame
 		this.add(buttons, BorderLayout.NORTH);
 		this.add(bottomPanel, BorderLayout.SOUTH);
 		this.add(workspace, BorderLayout.CENTER);
+                workspace.setWorkspaceZoom(zoom);
 	}
 	
 	public void doOpenArduBlockFile()
@@ -411,4 +446,18 @@ public class OpenblocksFrame extends JFrame
 			return new File(filePath + ".abp");
 		}
 	}
+        
+        public void setUIFont(javax.swing.plaf.FontUIResource f)
+        {
+            java.util.Enumeration<Object> keys = UIManager.getDefaults().keys();
+            while (keys.hasMoreElements())
+            {
+                Object key = keys.nextElement();
+                Object value = UIManager.get(key);
+                if (value instanceof javax.swing.plaf.FontUIResource)
+                {
+                    UIManager.put(key, f);
+                }
+            }
+        }
 }

@@ -22,10 +22,13 @@ import com.ardublock.translator.block.exception.SubroutineNotDeclaredException;
 import edu.mit.blocks.codeblocks.Block;
 import edu.mit.blocks.renderable.RenderableBlock;
 import edu.mit.blocks.workspace.Workspace;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 public class Translator
 {
 	private static final String variablePrefix = "_ABVAR_";
+        private static final String TRANSLITERATION_MAPPING = "com/ardublock/transliteration";
 
 	private Set<String> headerFileSet;
 	private Set<String> definitionSet;
@@ -42,7 +45,8 @@ public class Translator
 	private Map<String, String> booleanVariableSet;
 	private Map<String, String> stringVariableSet;
 	private Map<String, Object> internalData;
-	
+	private Map<String, String> translitLettersSet;
+        
 	private Workspace workspace;
 	
 	private String rootBlockName;
@@ -50,7 +54,7 @@ public class Translator
 	private int variableCnt;
 	private boolean isScoopProgram;
 	private boolean isGuinoProgram;
-
+        
 	public Translator(Workspace ws)
 	{
 		workspace = ws;
@@ -173,6 +177,8 @@ public class Translator
 		booleanVariableSet = new HashMap<String, String>();
 		stringVariableSet = new HashMap<String, String>();
 		
+                translitLettersSet = new HashMap<String, String>();
+                
 		internalData =  new HashMap<String, Object>();
 		blockAdaptor = buildOpenBlocksAdaptor();
 		
@@ -263,6 +269,7 @@ public class Translator
 	
 	public void addFunctionName(Long blockId, String functionName) throws SubroutineNameDuplicatedException
 	{
+                functionName = transliterate(functionName);
 		if (functionName.equals("loop") ||functionName.equals("setup") || functionNameSet.contains(functionName))
 		{
 			throw new SubroutineNameDuplicatedException(blockId);
@@ -273,7 +280,8 @@ public class Translator
 	
 	public boolean containFunctionName(String name)
 	{
-		return functionNameSet.contains(name.trim());
+                String functionName = transliterate(name.trim());
+		return functionNameSet.contains(functionName);
 	}
 	
 	
@@ -287,9 +295,10 @@ public class Translator
 		variableCnt = variableCnt + 1;
 		String varName = variablePrefix + variableCnt + "_";
 		int i;
-		for (i=0; i<reference.length(); ++i)
+                String transliteratedReference = transliterate(reference);
+		for (i=0; i<transliteratedReference.length(); ++i)
 		{
-			char c = reference.charAt(i);
+			char c = transliteratedReference.charAt(i);
 			if (Character.isLetter(c) || Character.isDigit(c) || (c == '_'))
 			{
 				varName = varName + c;
@@ -389,7 +398,7 @@ public class Translator
 		Iterable<RenderableBlock> renderableBlocks = workspace.getRenderableBlocks();
 		
 		for (RenderableBlock renderableBlock:renderableBlocks)
-		{
+		{                        
 			Block block = renderableBlock.getBlock();
 			
 			if (!block.hasPlug() && (Block.NULL.equals(block.getBeforeBlockID())))
@@ -437,4 +446,42 @@ public class Translator
 	{
 		internalData.put(name, value);
 	}
+        
+        public void loadTransliterationMap(){
+                if(translitLettersSet != null && !translitLettersSet.isEmpty()){
+                        return;
+                }
+                try{
+                        ResourceBundle translitBundle = ResourceBundle.getBundle(TRANSLITERATION_MAPPING);
+                        String sourceLetters = translitBundle.getString("source");
+                        String latinLetters = translitBundle.getString("latin");
+                        String [] sourceLettersArray = sourceLetters.split(",");
+                        String [] latinLettersArray = latinLetters.split(",");
+                        for(int index = 0; index < sourceLettersArray.length; index++){
+                            String letter = sourceLettersArray[index];
+                            String translit = latinLettersArray[index];
+                            translitLettersSet.put(letter, translit);
+                        }
+                }catch(Exception e){
+                    translitLettersSet = new HashMap<String, String>();
+                    return;
+                }
+        }
+        
+        public String transliterate(String source){
+                loadTransliterationMap();
+                if(translitLettersSet == null || translitLettersSet.isEmpty()){
+                        return source;
+                }
+                String result = "";
+                for(int i = 0; i < source.length(); i++){
+                        String ch = Character.toString(source.charAt(i));
+                        if(translitLettersSet.containsKey(ch)){
+                                result += translitLettersSet.get(ch);
+                        }else{
+                                result += ch;
+                        }
+                }
+                return result;
+        }
 }

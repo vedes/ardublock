@@ -13,6 +13,8 @@ import org.xml.sax.SAXException;
 import com.ardublock.core.Context;
 import com.ardublock.ui.ConsoleFrame;
 import com.ardublock.ui.OpenblocksFrame;
+import java.awt.Font;
+import javax.swing.UIManager;
 
 public class Main
 {
@@ -51,6 +53,7 @@ public class Main
 		Context context = Context.getContext();
 		context.setInArduino(false);
 		openblocksFrame.setVisible(true);
+                openblocksFrame.setUIFont (new javax.swing.plaf.FontUIResource(new Font("Arial",Font.PLAIN, 20)));
 	}
 
 	public void shutdown()
@@ -64,4 +67,18 @@ public class Main
 		ConsoleFrame consoleFrame = new ConsoleFrame();
 		consoleFrame.setVisible(true);
 	}
+        
+//        private void setUIFont(javax.swing.plaf.FontUIResource f)
+//        {
+//            java.util.Enumeration<Object> keys = UIManager.getDefaults().keys();
+//            while (keys.hasMoreElements())
+//            {
+//                Object key = keys.nextElement();
+//                Object value = UIManager.get(key);
+//                if (value instanceof javax.swing.plaf.FontUIResource)
+//                {
+//                    UIManager.put(key, f);
+//                }
+//            }
+//        }
 }

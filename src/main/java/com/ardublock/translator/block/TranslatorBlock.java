@@ -4,6 +4,7 @@ import com.ardublock.translator.Translator;
 import com.ardublock.translator.adaptor.BlockAdaptor;
 import com.ardublock.translator.block.exception.BlockException;
 import com.ardublock.translator.block.exception.SocketNullException;
+import com.ardublock.translator.block.exception.SubroutineNameDuplicatedException;
 import com.ardublock.translator.block.exception.SubroutineNotDeclaredException;
 
 abstract public class TranslatorBlock
@@ -49,7 +50,7 @@ abstract public class TranslatorBlock
 		this.blockAdaptor = translator.getBlockAdaptor();
 		this.codePrefix = codePrefix;
 		this.codeSuffix = codeSuffix;
-		this.label = label;
+		this.label = this.translator.transliterate(label);
 	}
 	
 	protected Translator getTranslator()
